@@ -7,38 +7,34 @@ const fiveDayForecastEl = document.querySelector(".five-day");
 const invalidSearchMessageEl = document.querySelector(
   ".invalid-search-message"
 );
-const citySearched = document.createElement("button");
-citySearched.setAttribute("class", "city-searched");
+const previouslySearchedEl = document.querySelector(".previously-searched");
+let storedCity = [];
 
+function searchHistory() {
+  previouslySearchedEl.textContent = ''
 
-function inputInfo(event) {
-  console.log('inputInfo', event)
+  for(let i = 0; i < storedCity.length; i++){
+    const citySearched = document.createElement("button");
+    citySearched.setAttribute("class", "city-searched");
 
-  const citySearchInput = inputEl.value.trim().toLowerCase();
+    citySearched.textContent = storedCity[i]
 
-  if (citySearchInput === "") {
-    invalidSearchMessageEl.textContent = "Please enter a city!";
-  } else {
-    invalidSearchMessageEl.textContent = "";
-    getLatLon(citySearchInput);
+    previouslySearchedEl.appendChild(citySearched)
   }
- 
+
+  inputEl.value = "";
+
+  let previouslySearchedBtn = document.querySelectorAll('.city-searched')
+  previouslySearchedBtn.forEach((previouslySearchedBtn) => {
+    previouslySearchedBtn.addEventListener("click", function (event) {
+      currentWeatherEl.textContent = "";
+      fiveDayForecastEl.textContent = "";
+      getLatLon(event.target.textContent);
+    });
+  });
 }
 
-function searchHistory(citySearchInput) {
-  currentWeatherEl.textContent = '';
-  fiveDayForecastEl.textContent = '';
 
-  citySearched.textContent = citySearchInput;
-  searchContainer.appendChild(citySearched);
-  inputEl.value = ''
-}
-
-citySearched.addEventListener('click', function(event){
-  event.preventDefault()
-  console.log('event', event)
-  getLatLon(event.target.innerText)
-})
 
 async function getLatLon(citySearchInput) {
   const citySearchedCoordinates = await fetch(
@@ -46,14 +42,32 @@ async function getLatLon(citySearchInput) {
   );
 
   if (citySearchedCoordinates.ok) {
-    searchHistory(citySearchInput);
-    const coordinates = await citySearchedCoordinates.json();
+    if (storedCity.includes(citySearchInput)) {
+      const coordinates = await citySearchedCoordinates.json();
+      getWeatherData(
+        coordinates.coord.lat,
+        coordinates.coord.lon,
+        coordinates.name
+      );
+    } else {
+      if (localStorage.getItem("cityName") === null) {
+        localStorage.setItem("cityName", "[]");
+      }
 
-    getWeatherData(
-      coordinates.coord.lat,
-      coordinates.coord.lon,
-      coordinates.name
-    );
+      storedCity = JSON.parse(localStorage.getItem("cityName"));
+      storedCity.push(citySearchInput);
+
+      localStorage.setItem("cityName", JSON.stringify(storedCity));
+
+      searchHistory();
+
+      const coordinates = await citySearchedCoordinates.json();
+      getWeatherData(
+        coordinates.coord.lat,
+        coordinates.coord.lon,
+        coordinates.name
+      );
+    }
   } else {
     invalidSearchMessageEl.textContent =
       "There are no search results matching your criteria.";
@@ -114,4 +128,16 @@ async function getWeatherData(lat, lon, name) {
   }
 }
 
-citySearchBtn.addEventListener("click", inputInfo);
+citySearchBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  const citySearchInput = inputEl.value.trim().toLowerCase();
+
+  if (citySearchInput === "") {
+    invalidSearchMessageEl.textContent = "Please enter a city!";
+  } else {
+    invalidSearchMessageEl.textContent = "";
+    currentWeatherEl.textContent = "";
+    fiveDayForecastEl.textContent = "";
+    getLatLon(citySearchInput);
+  }
+});
