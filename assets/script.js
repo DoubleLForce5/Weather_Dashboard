@@ -10,79 +10,17 @@ const invalidSearchMessageEl = document.querySelector(
 const previouslySearchedEl = document.querySelector(".previously-searched");
 let storedCity = [];
 
-function searchHistory() {
-  previouslySearchedEl.textContent = "";
-
-  for (let i = 0; i < storedCity.length; i++) {
-    const citySearched = document.createElement("button");
-    citySearched.setAttribute("class", "city-searched");
-
-    citySearched.textContent = storedCity[i];
-
-    previouslySearchedEl.appendChild(citySearched);
-  }
-
-  let previouslySearchedBtn = document.querySelectorAll(".city-searched");
-  previouslySearchedBtn.forEach((previouslySearchedBtn) => {
-    previouslySearchedBtn.addEventListener("click", function (event) {
-      currentWeatherEl.textContent = "";
-      fiveDayForecastEl.textContent = "";
-      getLatLon(event.target.textContent);
-    });
-  });
-}
-
-function DisplayCity() {
-  let citiesSearched = JSON.parse(localStorage.getItem("cityName"));
-
-  citiesSearched.forEach((city) => {
-    let cities = document.createElement("button");
-    cities.setAttribute("class", "search-history");
-    cities.textContent = city;
-    previouslySearchedEl.appendChild(cities);
-  });
-}
-
 async function getLatLon(citySearchInput) {
   const citySearchedCoordinates = await fetch(
     `http://api.openweathermap.org/data/2.5/weather?q=${citySearchInput}&appid=${key}`
   );
 
-  if (citySearchedCoordinates.ok) {
-    if (storedCity.includes(citySearchInput)) {
-      const coordinates = await citySearchedCoordinates.json();
-      getWeatherData(
-        coordinates.coord.lat,
-        coordinates.coord.lon,
-        coordinates.name
-      );
-    } else {
-      if (localStorage.getItem("cityName") === null) {
-        localStorage.setItem("cityName", "[]");
-      }
-
-      storedCity = JSON.parse(localStorage.getItem("cityName"));
-      storedCity.push(citySearchInput);
-
-      if (storedCity.length > 5) {
-        storedCity.shift();
-      }
-
-      localStorage.setItem("cityName", JSON.stringify(storedCity));
-
-      searchHistory();
-
-      const coordinates = await citySearchedCoordinates.json();
-      getWeatherData(
-        coordinates.coord.lat,
-        coordinates.coord.lon,
-        coordinates.name
-      );
-    }
-  } else {
-    invalidSearchMessageEl.textContent =
-      "There are no search results matching your criteria.";
-  }
+  const coordinates = await citySearchedCoordinates.json();
+  getWeatherData(
+    coordinates.coord.lat,
+    coordinates.coord.lon,
+    coordinates.name
+  );
 }
 
 async function getWeatherData(lat, lon, name) {
@@ -93,14 +31,11 @@ async function getWeatherData(lat, lon, name) {
 
   const weather = await weatherData.json();
 
-  console.log(weather);
-
   // current weather
   const date = new Date(weather.current.dt * 1000).toLocaleDateString("en-US");
   const currentWeatherIcon = `https://www.openweathermap.org/img/wn/${weather.current.weather[0].icon}.png`;
   const currentUvIndex = 10;
 
-  console.log(currentWeatherIcon);
   currentWeatherEl.innerHTML = `
     <div class="current-weather-header">${name} (${date})<img src="${currentWeatherIcon}" alt="weather-icon"/></div>
     <p class="current-temp">${weather.current.temp}<p>
@@ -150,6 +85,5 @@ citySearchBtn.addEventListener("click", (event) => {
     currentWeatherEl.textContent = "";
     fiveDayForecastEl.textContent = "";
     getLatLon(citySearchInput);
-    DisplayCity(citySearchInput)
   }
 });
