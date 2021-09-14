@@ -11,20 +11,18 @@ const previouslySearchedEl = document.querySelector(".previously-searched");
 let storedCity = [];
 
 function searchHistory() {
-  previouslySearchedEl.textContent = ''
+  previouslySearchedEl.textContent = "";
 
-  for(let i = 0; i < storedCity.length; i++){
+  for (let i = 0; i < storedCity.length; i++) {
     const citySearched = document.createElement("button");
     citySearched.setAttribute("class", "city-searched");
 
-    citySearched.textContent = storedCity[i]
+    citySearched.textContent = storedCity[i];
 
-    previouslySearchedEl.appendChild(citySearched)
+    previouslySearchedEl.appendChild(citySearched);
   }
 
-  inputEl.value = "";
-
-  let previouslySearchedBtn = document.querySelectorAll('.city-searched')
+  let previouslySearchedBtn = document.querySelectorAll(".city-searched");
   previouslySearchedBtn.forEach((previouslySearchedBtn) => {
     previouslySearchedBtn.addEventListener("click", function (event) {
       currentWeatherEl.textContent = "";
@@ -34,7 +32,16 @@ function searchHistory() {
   });
 }
 
+function DisplayCity() {
+  let citiesSearched = JSON.parse(localStorage.getItem("cityName"));
 
+  citiesSearched.forEach((city) => {
+    let cities = document.createElement("button");
+    cities.setAttribute("class", "search-history");
+    cities.textContent = city;
+    previouslySearchedEl.appendChild(cities);
+  });
+}
 
 async function getLatLon(citySearchInput) {
   const citySearchedCoordinates = await fetch(
@@ -56,6 +63,10 @@ async function getLatLon(citySearchInput) {
 
       storedCity = JSON.parse(localStorage.getItem("cityName"));
       storedCity.push(citySearchInput);
+
+      if (storedCity.length > 5) {
+        storedCity.shift();
+      }
 
       localStorage.setItem("cityName", JSON.stringify(storedCity));
 
@@ -139,5 +150,6 @@ citySearchBtn.addEventListener("click", (event) => {
     currentWeatherEl.textContent = "";
     fiveDayForecastEl.textContent = "";
     getLatLon(citySearchInput);
+    DisplayCity(citySearchInput)
   }
 });
