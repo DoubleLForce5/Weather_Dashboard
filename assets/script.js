@@ -44,7 +44,9 @@ function displayCity() {
     displayCityBtn.textContent = city;
     previouslySearchedEl.appendChild(displayCityBtn);
     displayCityBtn.addEventListener("click", (event) => {
+      fiveDayForecastEl.textContent = ''
       getLatLon(city)
+
     });
   });
 }
