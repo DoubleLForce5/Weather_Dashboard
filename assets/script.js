@@ -10,17 +10,55 @@ const invalidSearchMessageEl = document.querySelector(
 const previouslySearchedEl = document.querySelector(".previously-searched");
 let storedCity = [];
 
+function onLoad() {
+  if (localStorage.getItem("cityName")) {
+    storedCity = JSON.parse(localStorage.getItem("cityName"));
+  }
+  displayCity();
+}
+
 async function getLatLon(citySearchInput) {
   const citySearchedCoordinates = await fetch(
     `http://api.openweathermap.org/data/2.5/weather?q=${citySearchInput}&appid=${key}`
   );
 
+  if (!citySearchedCoordinates.ok) {
+    invalidSearchMessageEl.textContent = "Please try another city.";
+  }
+  // localStorage.setItem('cityName', citySearchInput)
   const coordinates = await citySearchedCoordinates.json();
   getWeatherData(
     coordinates.coord.lat,
     coordinates.coord.lon,
     coordinates.name
   );
+  addCity(citySearchInput);
+}
+
+function displayCity() {
+  previouslySearchedEl.textContent = "";
+
+  storedCity.forEach((city) => {
+    let displayCityBtn = document.createElement("button");
+    displayCityBtn.setAttribute("class", "display-city-button");
+    displayCityBtn.textContent = city;
+    previouslySearchedEl.appendChild(displayCityBtn);
+    displayCityBtn.addEventListener("click", (event) => {
+      getLatLon(city)
+    });
+  });
+}
+
+function addCity(citySearchInput) {
+  if (!storedCity.includes(citySearchInput)) {
+    while (storedCity.length > 5) {
+      storedCity.pop();
+    }
+
+    storedCity.unshift(citySearchInput);
+    localStorage.setItem("cityName", JSON.stringify(storedCity));
+  }
+  displayCity();
 }
 
 async function getWeatherData(lat, lon, name) {
@@ -74,9 +112,10 @@ async function getWeatherData(lat, lon, name) {
   }
 }
 
-citySearchBtn.addEventListener("click", (event) => {
+citySearchBtn.addEventListener("click", function (event) {
   event.preventDefault();
-  const citySearchInput = inputEl.value.trim().toLowerCase();
+
+  let citySearchInput = inputEl.value.trim().toLowerCase();
 
   if (citySearchInput === "") {
     invalidSearchMessageEl.textContent = "Please enter a city!";
@@ -87,3 +126,5 @@ citySearchBtn.addEventListener("click", (event) => {
     getLatLon(citySearchInput);
   }
 });
+
+onLoad();
