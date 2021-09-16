@@ -11,7 +11,7 @@
 <body>
   <div class="header">Weather Dashboard</div>
   <section class="main-section d-flex flex-row">
-    <div class="col-4 search-container">
+    <div class="search-container">
       <label for="city-input" class="label">Search for a City:</label>
       <div class="input-group mb-3 input-button-container">
         <input type="text" class="form-control input-box" placeholder="city name" aria-label="Name of city searched" aria-describedby="button-addon2" id="city">
@@ -20,8 +20,9 @@
       <div class="invalid-search-message"></div>
       <div class='previously-searched'></div>
     </div>
-    <div class="col-8">
+    <div>
       <div class="current-weather"></div>
+      <p id="five-day-weather-label"></p>
       <div class="five-day"></div>
     </div>
   </section>

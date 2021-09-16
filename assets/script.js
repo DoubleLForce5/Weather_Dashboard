@@ -7,6 +7,8 @@ const fiveDayForecastEl = document.querySelector(".five-day");
 const invalidSearchMessageEl = document.querySelector(
   ".invalid-search-message"
 );
+const fiveDayLabel = document.getElementById("five-day-weather-label");
+
 const previouslySearchedEl = document.querySelector(".previously-searched");
 let storedCity = [];
 
@@ -15,6 +17,7 @@ function onLoad() {
     storedCity = JSON.parse(localStorage.getItem("cityName"));
   }
   displayCity();
+  getLatLon('dallas')
 }
 
 async function getLatLon(citySearchInput) {
@@ -77,11 +80,12 @@ async function getWeatherData(lat, lon, name) {
   const currentUvIndex = 10;
 
   currentWeatherEl.innerHTML = `
+    <p id="current-weather-label">Current Weather:</p>
     <div class="current-weather-header">${name} (${date})<img src="${currentWeatherIcon}" alt="weather-icon"/></div>
-    <p class="current-temp">${weather.current.temp}<p>
-    <p class="current-humidity">${weather.current.humidity}<p>
-    <p class="current-wind-speed">${weather.current.wind_speed}<p>
-    <p class="current-uv">${currentUvIndex}<p>`;
+    <p class="current-temp">Temperature: ${weather.current.temp}°<p>
+    <p class="current-humidity">Humidity: ${weather.current.humidity}%<p>
+    <p class="current-wind-speed">Wind Speed: ${weather.current.wind_speed} mph<p>
+    <p class="current-uv">UV Index: ${currentUvIndex}<p>`;
 
   if (currentUvIndex < 3) {
     document.querySelector(".current-uv").style.color = "#3ea832";
@@ -95,10 +99,13 @@ async function getWeatherData(lat, lon, name) {
     document.querySelector(".current-uv").style.color = "#3299a8";
   }
 
+  fiveDayLabel.textContent = "Five Day Forecast:"
+
   for (let i = 1; i <= 5; i++) {
     let dailyWeatherCard = document.createElement("div");
     dailyWeatherCard.setAttribute("class", "daily-weather-card");
     fiveDayForecastEl.appendChild(dailyWeatherCard);
+
 
     let fiveDayDate = new Date(weather.daily[i].dt * 1000).toLocaleDateString(
       "en-US"
@@ -109,9 +116,10 @@ async function getWeatherData(lat, lon, name) {
     dailyWeatherCard.innerHTML = ` 
     <p>${fiveDayDate}</p>
     <img src="${fiveDayIcons}" alt="weather-icon"/> 
-    <p>${weather.daily[i].temp.max}</p>
-    <p>${weather.daily[i].humidity}</p>`;
+    <p>Max Temperature: ${weather.daily[i].temp.max}°</p>
+    <p>Humidity: ${weather.daily[i].humidity}%</p>`;
   }
+
 }
 
 citySearchBtn.addEventListener("click", function (event) {
