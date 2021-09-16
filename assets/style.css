@@ -5,6 +5,11 @@
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.main-section {
+  display: flex;
+  flex-direction: row;
+}
+
 .header {
   text-align: center;
   margin: 10px;
@@ -14,7 +19,7 @@
 .search-container {
   /* height: 100vh; */
   margin: 10px;
-  width: fit-content;
+ 
 }
 
 .display-city-button {
@@ -74,7 +79,13 @@
 
   .search-container {
     padding: 5px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
+  }
+
+  .input-group {
+    width: 50%;
   }
 
   .current-weather {
