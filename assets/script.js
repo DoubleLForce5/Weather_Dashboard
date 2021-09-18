@@ -1,4 +1,4 @@
-const key = config.API_KEY;
+const key = '4aa119594e25e5bca728bb1f01a15803';
 const inputEl = document.querySelector(".input-box");
 const citySearchBtn = document.querySelector(".search-button");
 const searchContainer = document.querySelector(".search-container");
