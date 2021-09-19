@@ -16,7 +16,7 @@ https://doublelforce5.github.io/Weather_Dashboard/
 On page load, the user is presented with the current and five day forecast for the application's default city, Dallas.
 <img width="992" alt="Screen Shot 2021-09-18 at 7 11 08 PM" src="https://user-images.githubusercontent.com/73543476/133911525-7adfc8ec-ae14-4b03-84ed-a3f016f6a5e7.png">
 
-Once on the page, the user is free to make an unlimited number of searches.
+Once on the page, the user is free to perform multiple searches. The user's six most recent searches persist under the search bar for easy access later. 
 <img width="1070" alt="Screen Shot 2021-09-18 at 7 17 19 PM" src="https://user-images.githubusercontent.com/73543476/133911599-6180c4fb-7dfd-49eb-a2b4-70781057f88c.png">
 
 ## Tech 
