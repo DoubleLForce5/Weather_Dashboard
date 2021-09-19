@@ -5,7 +5,7 @@ The weather dashboard allows users to enter a city into the search bar and query
 
  
 ## Deployed site
-
+https://doublelforce5.github.io/Weather_Dashboard/
 
 ## Installation
 - Clone this repository and open it within VS Code or any text editor of your choosing.
