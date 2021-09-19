@@ -9,14 +9,14 @@ https://doublelforce5.github.io/Weather_Dashboard/
 
 ## Installation
 - Clone this repository and open it within VS Code or any text editor of your choosing.
-- Please add your Open Weather Map API key to the script.js file. 
-- Use live server or open default browser to view the code quiz in your local browser.  
+- Please add your personal Open Weather Map API key to the script.js file. 
+- Use live server or open default browser to view the weather dashboard in your local browser.  
 
 ## Usage instructions 
-On page load, the user is presented with the current and five day forcast for the application's default city, Dallas.
+On page load, the user is presented with the current and five day forecast for the application's default city, Dallas.
 <img width="992" alt="Screen Shot 2021-09-18 at 7 11 08 PM" src="https://user-images.githubusercontent.com/73543476/133911525-7adfc8ec-ae14-4b03-84ed-a3f016f6a5e7.png">
 
-Once on the page the user is free to make an unlimited number of searches.
+Once on the page, the user is free to make an unlimited number of searches.
 <img width="1070" alt="Screen Shot 2021-09-18 at 7 17 19 PM" src="https://user-images.githubusercontent.com/73543476/133911599-6180c4fb-7dfd-49eb-a2b4-70781057f88c.png">
 
 ## Tech 
