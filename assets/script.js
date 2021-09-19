@@ -22,7 +22,7 @@ function onLoad() {
 
 async function getLatLon(citySearchInput) {
   const citySearchedCoordinates = await fetch(
-    `http://api.openweathermap.org/data/2.5/weather?q=${citySearchInput}&appid=${key}`
+    `https://api.openweathermap.org/data/2.5/weather?q=${citySearchInput}&appid=${key}`
   );
 
   if (!citySearchedCoordinates.ok) {
