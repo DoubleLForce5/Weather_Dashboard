@@ -21,7 +21,7 @@ Once on the page, the user is free to perform multiple searches. The user's six 
 
 ## Tech 
 - CSS
-- HMTL
+- HTML
 - JavaScript
 - Open Weather Map API
 
